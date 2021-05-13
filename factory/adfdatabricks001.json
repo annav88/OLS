@@ -1,0 +1,9 @@
+{
+	"name": "adfdatabricks001",
+	"location": "francecentral",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "208fd78e-96f4-42ce-9139-44b767390137",
+		"tenantId": "72f988bf-86f1-41af-91ab-2d7cd011db47"
+	}
+}
