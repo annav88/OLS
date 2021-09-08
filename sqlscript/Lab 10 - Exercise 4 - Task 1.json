@@ -1,0 +1,17 @@
+{
+	"name": "Lab 10 - Exercise 4 - Task 1",
+	"properties": {
+		"content": {
+			"query": "SELECT TOP 1000 * FROM\n(\n    SELECT\n        S.CustomerId\n        ,D.Year\n        ,D.Quarter\n        ,SUM(S.TotalAmount) as TotalAmount\n    FROM\n        [wwi_perf].[Sale_Partition02] S\n        join [wwi].[Date] D on\n            S.TransactionDateId = D.DateId\n    GROUP BY\n        S.CustomerId\n        ,D.Year\n        ,D.Quarter\n) T\n\nSELECT TOP 1000 * FROM\n(\n    SELECT\n        S.CustomerId\n        ,D.Year\n        ,D.Month\n        ,SUM(S.ProfitAmount) as TotalProfit\n    FROM\n        [wwi_perf].[Sale_Partition02] S\n        join [wwi].[Date] D on\n            S.TransactionDateId = D.DateId\n    GROUP BY\n        S.CustomerId\n        ,D.Year\n        ,D.Month\n) T\n\nCREATE MATERIALIZED VIEW\n    wwi_perf.mvCustomerSales\nWITH\n(\n    DISTRIBUTION = HASH( CustomerId )\n)\nAS\nSELECT\n    S.CustomerId\n    ,D.Year\n    ,D.Quarter\n    ,D.Month\n    ,SUM(S.TotalAmount) as TotalAmount\n    ,SUM(S.ProfitAmount) as TotalProfit\nFROM\n    [wwi_perf].[Sale_Partition02] S\n    join [wwi].[Date] D on\n        S.TransactionDateId = D.DateId\nGROUP BY\n    S.CustomerId\n    ,D.Year\n    ,D.Quarter\n    ,D.Month\n\n\nEXPLAIN\nSELECT TOP 1000 * FROM\n(\n    SELECT\n        S.CustomerId\n        ,D.Year\n        ,D.Quarter\n        ,SUM(S.TotalAmount) as TotalAmount\n    FROM\n        [wwi_perf].[Sale_Partition02] S\n        join [wwi].[Date] D on\n            S.TransactionDateId = D.DateId\n    GROUP BY\n        S.CustomerId\n        ,D.Year\n        ,D.Quarter\n) T\n\n\nEXPLAIN\nSELECT TOP 1000 * FROM\n(\n    SELECT\n        S.CustomerId\n        ,D.Year\n        ,D.Month\n        ,SUM(S.ProfitAmount) as TotalProfit\n    FROM\n        [wwi_perf].[Sale_Partition02] S\n        join [wwi].[Date] D on\n            S.TransactionDateId = D.DateId\n    GROUP BY\n        S.CustomerId\n        ,D.Year\n        ,D.Month\n) T\n\nDBCC PDW_SHOWMATERIALIZEDVIEWOVERHEAD ( 'wwi_perf.mvCustomerSales' )\n\nUPDATE\n    [wwi_perf].[Sale_Partition02]\nSET\n    TotalAmount = TotalAmount * 1.01\n    ,ProfitAmount = ProfitAmount * 1.01\nWHERE\n    CustomerId BETWEEN 100 and 200\n\nDBCC PDW_SHOWMATERIALIZEDVIEWOVERHEAD ( 'wwi_perf.mvCustomerSales' )\n\nALTER MATERIALIZED VIEW [wwi_perf].[mvCustomerSales] REBUILD\n\nDBCC PDW_SHOWMATERIALIZEDVIEWOVERHEAD ( 'wwi_perf.mvCustomerSales' )\n",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"databaseName": "SQLPool01",
+				"poolName": "SQLPool01"
+			},
+			"resultLimit": 5000
+		},
+		"type": "SqlQuery"
+	}
+}

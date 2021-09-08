@@ -1,0 +1,442 @@
+{
+	"name": "Lab 09",
+	"properties": {
+		"nbformat": 4,
+		"nbformat_minor": 2,
+		"bigDataPool": {
+			"referenceName": "SparkPool01",
+			"type": "BigDataPoolReference"
+		},
+		"sessionProperties": {
+			"driverMemory": "28g",
+			"driverCores": 4,
+			"executorMemory": "28g",
+			"executorCores": 4,
+			"numExecutors": 2,
+			"conf": {
+				"spark.dynamicAllocation.enabled": "false",
+				"spark.dynamicAllocation.minExecutors": "2",
+				"spark.dynamicAllocation.maxExecutors": "2"
+			}
+		},
+		"metadata": {
+			"saveOutput": true,
+			"synapse_widget": {
+				"version": "0.1",
+				"state": {
+					"1ed35491-e9aa-483e-88d1-cc5c28ea9887": {
+						"type": "Synapse.DataFrame",
+						"sync_state": {
+							"table": {
+								"rows": [
+									{
+										"preferredProductId": 2717,
+										"isPreferredProduct": true,
+										"productId": 2717,
+										"userId": 148,
+										"isTopProduct": false
+									},
+									{
+										"preferredProductId": 4002,
+										"isPreferredProduct": true,
+										"productId": 4002,
+										"userId": 148,
+										"isTopProduct": false
+									},
+									{
+										"preferredProductId": 1716,
+										"isPreferredProduct": true,
+										"productId": 1716,
+										"userId": 148,
+										"isTopProduct": false
+									},
+									{
+										"preferredProductId": 4520,
+										"isPreferredProduct": true,
+										"productId": 4520,
+										"userId": 148,
+										"isTopProduct": false
+									},
+									{
+										"preferredProductId": 951,
+										"isPreferredProduct": true,
+										"productId": 951,
+										"userId": 148,
+										"isTopProduct": false
+									},
+									{
+										"preferredProductId": 1817,
+										"isPreferredProduct": true,
+										"productId": 1817,
+										"userId": 148,
+										"isTopProduct": false
+									},
+									{
+										"preferredProductId": 2634,
+										"isPreferredProduct": true,
+										"productId": 2634,
+										"userId": 463,
+										"isTopProduct": false
+									},
+									{
+										"preferredProductId": 2795,
+										"isPreferredProduct": true,
+										"productId": 2795,
+										"userId": 463,
+										"isTopProduct": false
+									},
+									{
+										"preferredProductId": 1946,
+										"isPreferredProduct": true,
+										"productId": 1946,
+										"userId": 471,
+										"isTopProduct": false
+									},
+									{
+										"preferredProductId": 4431,
+										"isPreferredProduct": true,
+										"productId": 4431,
+										"userId": 471,
+										"isTopProduct": false
+									}
+								],
+								"schema": {
+									"visitorId": "int",
+									"productId": "int",
+									"itemsPurchasedLast12Months": "int",
+									"preferredProductId": "int",
+									"userId": "int",
+									"isTopProduct": "boolean",
+									"isPreferredProduct": "boolean"
+								}
+							},
+							"isSummary": false,
+							"language": "scala"
+						},
+						"persist_state": {
+							"view": {
+								"type": "details",
+								"chartOptions": {
+									"chartType": "bar",
+									"aggregationType": "sum",
+									"categoryFieldKeys": [
+										"productId"
+									],
+									"seriesFieldKeys": [
+										"visitorId"
+									],
+									"isStacked": false
+								}
+							}
+						}
+					}
+				}
+			},
+			"kernelspec": {
+				"name": "synapse_pyspark",
+				"display_name": "Synapse PySpark"
+			},
+			"language_info": {
+				"name": "python"
+			},
+			"a365ComputeOptions": {
+				"id": "/subscriptions/7567b7de-befe-40fa-b883-40bb316ee50c/resourceGroups/Lab8/providers/Microsoft.Synapse/workspaces/asaworkspacelab8/bigDataPools/SparkPool01",
+				"name": "SparkPool01",
+				"type": "Spark",
+				"endpoint": "https://asaworkspacelab8.dev.azuresynapse.net/livyApi/versions/2019-11-01-preview/sparkPools/SparkPool01",
+				"auth": {
+					"type": "AAD",
+					"authResource": "https://dev.azuresynapse.net"
+				},
+				"sparkVersion": "2.4",
+				"nodeCount": 3,
+				"cores": 4,
+				"memory": 28,
+				"extraHeader": null
+			}
+		},
+		"cells": [
+			{
+				"cell_type": "code",
+				"metadata": {
+					"microsoft": {
+						"language": "python"
+					},
+					"collapsed": false
+				},
+				"source": [
+					"%%pyspark\r\n",
+					"df = spark.read.load('abfss://wwi-02@asadatalakelab8.dfs.core.windows.net/top-products/*.parquet', format='parquet')\r\n",
+					"display(df.limit(10))"
+				],
+				"attachments": null,
+				"execution_count": 2
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					},
+					"collapsed": true
+				},
+				"source": [
+					"topPurchases = df.select(\r\n",
+					"    \"UserId\", \"ProductId\",\r\n",
+					"    \"ItemsPurchasedLast12Months\", \"IsTopProduct\",\r\n",
+					"    \"IsPreferredProduct\")\r\n",
+					"\r\n",
+					"# Populate a temporary view so we can query from SQL\r\n",
+					"topPurchases.createOrReplaceTempView(\"top_purchases\")\r\n",
+					"\r\n",
+					"topPurchases.show(100)\r\n",
+					""
+				],
+				"attachments": null,
+				"execution_count": 3
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					},
+					"collapsed": true
+				},
+				"source": [
+					"from pyspark.sql.functions import *\r\n",
+					"\r\n",
+					"topPreferredProducts = (topPurchases\r\n",
+					"    .filter( col(\"IsTopProduct\") == True)\r\n",
+					"    .filter( col(\"IsPreferredProduct\") == True)\r\n",
+					"    .orderBy( col(\"ItemsPurchasedLast12Months\").desc() ))\r\n",
+					"\r\n",
+					"topPreferredProducts.show(100)\r\n",
+					""
+				],
+				"attachments": null,
+				"execution_count": 4
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					},
+					"microsoft": {
+						"language": "sparksql"
+					},
+					"collapsed": false
+				},
+				"source": [
+					"%%sql\r\n",
+					"\r\n",
+					"CREATE OR REPLACE TEMPORARY VIEW top_5_products\r\n",
+					"AS\r\n",
+					"    select UserId, ProductId, ItemsPurchasedLast12Months\r\n",
+					"    from (select *,\r\n",
+					"                row_number() over (partition by UserId order by ItemsPurchasedLast12Months desc) as seqnum\r\n",
+					"        from top_purchases\r\n",
+					"        ) a\r\n",
+					"    where seqnum <= 5 and IsTopProduct == true and IsPreferredProduct = true\r\n",
+					"    order by a.UserId\r\n",
+					"\r\n",
+					""
+				],
+				"attachments": null,
+				"execution_count": 5
+			},
+			{
+				"cell_type": "markdown",
+				"metadata": {
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"Note that there is no output for the above query. The query uses the top_purchases temporary view as a source and applies a row_number() over method to apply a row number for the records for each user where ItemsPurchasedLast12Months is greatest. The where clause filters the results so we only retrieve up to five products where both IsTopProduct and IsPreferredProduct are set to true. This gives us the top five most purchased products for each user where those products are also identified as their favorite products, according to their user profile stored in Azure Cosmos DB."
+				],
+				"attachments": null
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					},
+					"collapsed": true
+				},
+				"source": [
+					"top5Products = sqlContext.table(\"top_5_products\")\r\n",
+					"\r\n",
+					"top5Products.show(100)\r\n",
+					""
+				],
+				"attachments": null,
+				"execution_count": 6
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					},
+					"collapsed": true
+				},
+				"source": [
+					"#Execute the following in a new cell to compare the number of top preferred products to the top five preferred products per customer:\r\n",
+					"\r\n",
+					"print('before filter: ', topPreferredProducts.count(), ', after filter: ', top5Products.count())"
+				],
+				"attachments": null,
+				"execution_count": 7
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					},
+					"collapsed": true
+				},
+				"source": [
+					"top5ProductsOverall = (top5Products.select(\"ProductId\",\"ItemsPurchasedLast12Months\")\r\n",
+					"    .groupBy(\"ProductId\")\r\n",
+					"    .agg( sum(\"ItemsPurchasedLast12Months\").alias(\"Total\") )\r\n",
+					"    .orderBy( col(\"Total\").desc() )\r\n",
+					"    .limit(5))\r\n",
+					"\r\n",
+					"top5ProductsOverall.show()\r\n",
+					""
+				],
+				"attachments": null,
+				"execution_count": 8
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					},
+					"collapsed": true,
+					"tags": [
+						"parameters"
+					]
+				},
+				"source": [
+					"import uuid\r\n",
+					"\r\n",
+					"# Generate random GUID\r\n",
+					"runId = uuid.uuid4()\r\n",
+					""
+				],
+				"attachments": null,
+				"execution_count": 9
+			},
+			{
+				"cell_type": "markdown",
+				"metadata": {
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"\r\n",
+					"Paste the following code in a new cell to use the runId variable as the Parquet filename in the /top5-products/ path in the primary data lake account. Replace YOUR_DATALAKE_NAME in the path with the name of your primary data lake account. To find this, scroll up to Cell 1 at the top of the page (1). Copy the data lake storage account from the path (2). Paste this value as a replacement for YOUR_DATALAKE_NAME in the path (3) inside the new cell, then execute the cell."
+				],
+				"attachments": null
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					},
+					"microsoft": {
+						"language": "python"
+					},
+					"collapsed": true
+				},
+				"source": [
+					"%%pyspark\r\n",
+					"\r\n",
+					"top5ProductsOverall.write.parquet('abfss://wwi-02@asadatalakelab8.dfs.core.windows.net/top5-products/' + str(runId) + '.parquet')"
+				],
+				"attachments": null,
+				"execution_count": 10
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					},
+					"collapsed": true
+				},
+				"source": [
+					"print(str(runId))"
+				],
+				"attachments": null,
+				"execution_count": 11
+			}
+		]
+	}
+}

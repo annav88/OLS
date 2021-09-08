@@ -1,0 +1,18 @@
+{
+	"name": "Lab 10 - Exercise 1 - Task 2_3",
+	"properties": {
+		"description": "Analytic Functions",
+		"content": {
+			"query": "-- PERCENTILE_CONT, PERCENTILE_DISC\n/*\nSELECT DISTINCT c.Category  \n,PERCENTILE_CONT(0.5) WITHIN GROUP (ORDER BY bc.Downloads)\n                      OVER (PARTITION BY Category) AS MedianCont  \n,PERCENTILE_DISC(0.5) WITHIN GROUP (ORDER BY bc.Downloads)\n                      OVER (PARTITION BY Category) AS MedianDisc  \nFROM dbo.Category AS c  \nINNER JOIN dbo.BookList AS bl\n    ON bl.CategoryID = c.ID\nINNER JOIN dbo.BookConsumption AS bc  \n    ON bc.BookID = bl.ID\nORDER BY Category\n*/\n\n--LAG Function\nSELECT ProductId,\n    [Hour],\n    [HourSalesTotal],\n    LAG(HourSalesTotal,1,0) OVER (ORDER BY [Hour]) AS PreviousHouseSalesTotal,\n    [HourSalesTotal] - LAG(HourSalesTotal,1,0) OVER (ORDER BY [Hour]) AS Diff\nFROM ( \n    SELECT ProductId,\n        [Hour],\n        SUM(TotalAmount) AS HourSalesTotal\n    FROM [wwi_perf].[Sale_Index]\n    WHERE ProductId = 3848 AND [Hour] BETWEEN 8 AND 20\n    GROUP BY ProductID, [Hour]) as HourTotals\n",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"databaseName": "SQLPool01",
+				"poolName": "SQLPool01"
+			},
+			"resultLimit": 5000
+		},
+		"type": "SqlQuery"
+	}
+}

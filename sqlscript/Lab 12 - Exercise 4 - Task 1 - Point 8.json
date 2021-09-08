@@ -1,0 +1,17 @@
+{
+	"name": "Lab 12 - Exercise 4 - Task 1 - Point 8",
+	"properties": {
+		"content": {
+			"query": "SELECT TOP (100) [userId]\n,[cartId]\n,[preferredProducts]\n,[productReviews]\n,[productId]\n,[reviewText]\n FROM [dbo].[UserProfileHTAP]",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"databaseName": "Profiles",
+				"poolName": "Built-in"
+			},
+			"resultLimit": 5000
+		},
+		"type": "SqlQuery"
+	}
+}

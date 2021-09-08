@@ -1,0 +1,38 @@
+{
+	"name": "asal400_lab2_writecampaignanalyticstoasa",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "asal400_campaign_analytics_source",
+						"type": "DatasetReference"
+					},
+					"name": "CampaignAnalytics"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "asal400_wwi_campaign_analytics_asa",
+						"type": "DatasetReference"
+					},
+					"name": "CampaignAnalyticsASA"
+				}
+			],
+			"transformations": [
+				{
+					"name": "MapCampaignAnalytics"
+				},
+				{
+					"name": "ConvertColumnTypesAndValues"
+				},
+				{
+					"name": "SelectCampaignAnalyticsColumns"
+				}
+			],
+			"script": "source(output(\n\t\t{_col0_} as string,\n\t\t{_col1_} as string,\n\t\t{_col2_} as string,\n\t\t{_col3_} as string,\n\t\t{_col4_} as string,\n\t\t{_col5_} as double,\n\t\t{_col6_} as string,\n\t\t{_col7_} as double,\n\t\t{_col8_} as string,\n\t\t{_col9_} as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false) ~> CampaignAnalytics\nCampaignAnalytics select(mapColumn(\n\t\tRegion = {_col0_},\n\t\tCountry = {_col1_},\n\t\tProductCategory = {_col2_},\n\t\tCampaignName = {_col3_},\n\t\tRevenuePart1 = {_col4_},\n\t\tRevenue = {_col5_},\n\t\tRevenueTargetPart1 = {_col6_},\n\t\tRevenueTarget = {_col7_},\n\t\tCity = {_col8_},\n\t\tState = {_col9_}\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> MapCampaignAnalytics\nMapCampaignAnalytics derive(Revenue = toDecimal(replace(concat(toString(RevenuePart1), toString(Revenue)), '\\\\', ''), 10, 2, '$###,###.##'),\n\t\tRevenueTarget = toDecimal(replace(concat(toString(RevenueTargetPart1), toString(RevenueTarget)), '\\\\', ''), 10, 2, '$###,###.##')) ~> ConvertColumnTypesAndValues\nConvertColumnTypesAndValues select(mapColumn(\n\t\tRegion,\n\t\tCountry,\n\t\tProductCategory,\n\t\tCampaignName,\n\t\tRevenue,\n\t\tRevenueTarget,\n\t\tCity,\n\t\tState\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> SelectCampaignAnalyticsColumns\nSelectCampaignAnalyticsColumns sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinput(\n\t\tRegion as string,\n\t\tCountry as string,\n\t\tProductCategory as string,\n\t\tCampaignName as string,\n\t\tRevenue as decimal(10,2),\n\t\tRevenueTarget as decimal(10,2),\n\t\tCity as string,\n\t\tState as string\n\t),\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\ttruncate:true,\n\tformat: 'table',\n\tstaged: false,\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'stopOnFirstError') ~> CampaignAnalyticsASA"
+		}
+	}
+}

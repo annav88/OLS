@@ -1,0 +1,12 @@
+{
+	"name": "asadatalakelab8",
+	"type": "Microsoft.Synapse/workspaces/linkedservices",
+	"properties": {
+		"annotations": [],
+		"type": "AzureBlobFS",
+		"typeProperties": {
+			"url": "https://asadatalakelab8.dfs.core.windows.net",
+			"encryptedCredential": "ew0KICAiVmVyc2lvbiI6ICIyMDE3LTExLTMwIiwNCiAgIlByb3RlY3Rpb25Nb2RlIjogIktleSIsDQogICJTZWNyZXRDb250ZW50VHlwZSI6ICJQbGFpbnRleHQiLA0KICAiQ3JlZGVudGlhbElkIjogIkFTQVdPUktTUEFDRUxBQjhfNGVlYzJlZTItZjQ2Zi00MGFjLWE1MjktMTA1MDRjNGRiYzA2Ig0KfQ=="
+		}
+	}
+}

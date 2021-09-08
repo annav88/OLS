@@ -1,0 +1,17 @@
+{
+	"name": "Lab 08 - Exercise 1 - Task 1 - Create Artifacts and SQL Tables",
+	"properties": {
+		"content": {
+			"query": "/*create a new table that joins users' preferred products stored in Azure Cosmos DB with top product \npurchases per user from the e-commerce site, stored in JSON files within the data lake*/\n\nCREATE TABLE [wwi].[UserTopProductPurchases]\n(\n    [UserId] [int]  NOT NULL,\n    [ProductId] [int]  NOT NULL,\n    [ItemsPurchasedLast12Months] [int]  NULL,\n    [IsTopProduct] [bit]  NOT NULL,\n    [IsPreferredProduct] [bit]  NOT NULL\n)\nWITH\n(\n    DISTRIBUTION = HASH ( [UserId] ),\n    CLUSTERED COLUMNSTORE INDEX\n)\n\n/*Campaing Analytics CSV file table*/\n\nCREATE TABLE [wwi].[CampaignAnalytics]\n(\n    [Region] [nvarchar](50)  NOT NULL,\n    [Country] [nvarchar](30)  NOT NULL,\n    [ProductCategory] [nvarchar](50)  NOT NULL,\n    [CampaignName] [nvarchar](500)  NOT NULL,\n    [Revenue] [decimal](10,2)  NULL,\n    [RevenueTarget] [decimal](10,2)  NULL,\n    [City] [nvarchar](50)  NULL,\n    [State] [nvarchar](25)  NULL\n)\nWITH\n(\n    DISTRIBUTION = HASH ( [Region] ),\n    CLUSTERED COLUMNSTORE INDEX\n)\n\n\n\n\n\n",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"databaseName": "SQLPool01",
+				"poolName": "SQLPool01"
+			},
+			"resultLimit": 5000
+		},
+		"type": "SqlQuery"
+	}
+}

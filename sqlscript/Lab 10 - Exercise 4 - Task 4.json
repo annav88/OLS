@@ -1,0 +1,17 @@
+{
+	"name": "Lab 10 - Exercise 4 - Task 4",
+	"properties": {
+		"content": {
+			"query": "SELECT\n    *\nFROM\n    [wwi_perf].[Sale_Hash]\nWHERE\n    CustomerId = 500000\n\nSELECT\n    *\nFROM\n    [wwi_perf].[Sale_Index]\nWHERE\n    CustomerId = 500000\n\nSELECT\n    *\nFROM\n    [wwi_perf].[Sale_Hash]\nWHERE\n    CustomerId between 400000 and 400100\n\nSELECT\n    *\nFROM\n    [wwi_perf].[Sale_Index]\nWHERE\n    CustomerId between 400000 and 400100\n\nSELECT\n    *\nFROM\n    [wwi_perf].[Sale_Index]\nWHERE\n    CustomerId between 400000 and 400100\n    and StoreId between 2000 and 4000\n\nCREATE INDEX Store_Index on wwi_perf.Sale_Index (StoreId)\n",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"databaseName": "SQLPool01",
+				"poolName": "SQLPool01"
+			},
+			"resultLimit": 5000
+		},
+		"type": "SqlQuery"
+	}
+}

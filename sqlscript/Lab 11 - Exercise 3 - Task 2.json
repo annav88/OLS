@@ -1,0 +1,17 @@
+{
+	"name": "Lab 11 - Exercise 3 - Task 2",
+	"properties": {
+		"content": {
+			"query": "CREATE TABLE [wwi_perf].[Sale_Hash_Projection_Big]\nWITH\n(\n\tDISTRIBUTION = HASH ( [CustomerId] ),\n\tHEAP\n)\nAS\nSELECT\n\t[CustomerId]\n\t,CAST([ProductId] as bigint) as [ProductId]\n\t,CAST([Quantity] as bigint) as [Quantity]\nFROM\n\t[wwi_perf].[Sale_Hash_Ordered]\n\nCREATE TABLE [wwi_perf].[Sale_Hash_Projection_Big2]\nWITH\n(\n\tDISTRIBUTION = HASH ( [CustomerId] ),\n\tCLUSTERED COLUMNSTORE INDEX\n)\nAS\nSELECT\n\t[CustomerId]\n\t,CAST([ProductId] as bigint) as [ProductId]\n\t,CAST([Quantity] as bigint) as [Quantity]\nFROM\n\t[wwi_perf].[Sale_Hash_Ordered]\n",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"databaseName": "SQLPool01",
+				"poolName": "SQLPool01"
+			},
+			"resultLimit": 5000
+		},
+		"type": "SqlQuery"
+	}
+}

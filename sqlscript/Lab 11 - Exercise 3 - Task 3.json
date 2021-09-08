@@ -1,0 +1,17 @@
+{
+	"name": "Lab 11 - Exercise 3 - Task 3",
+	"properties": {
+		"content": {
+			"query": "SELECT 'Sale_Hash_Projection', COUNT_BIG(*) FROM [wwi_perf].[Sale_Hash_Projection]\nUNION\nSELECT 'Sale_Hash_Projection2', COUNT_BIG(*) FROM [wwi_perf].[Sale_Hash_Projection2]\nUNION\nSELECT 'Sale_Hash_Projection_Big', COUNT_BIG(*) FROM [wwi_perf].[Sale_Hash_Projection_Big]\nUNION\nSELECT 'Sale_Hash_Projection_Big2', COUNT_BIG(*) FROM [wwi_perf].[Sale_Hash_Projection_Big2]\n\n/*************/\n\nSELECT\n    table_name\n,    distribution_policy_name\n,      distribution_column\n,    index_type_desc\n,    COUNT(distinct partition_nmbr) as nbr_partitions\n,    SUM(row_count)                 as table_row_count\n,    SUM(reserved_space_GB)         as table_reserved_space_GB\n,    SUM(data_space_GB)             as table_data_space_GB\n,    SUM(index_space_GB)            as table_index_space_GB\n,    SUM(unused_space_GB)           as table_unused_space_GB\nFROM\n    [wwi_perf].[vTableSizes]\nWHERE\n    schema_name = 'wwi_perf'\n    and table_name in ('Sale_Hash_Projection', 'Sale_Hash_Projection2',\n        'Sale_Hash_Projection_Big', 'Sale_Hash_Projection_Big2')\nGROUP BY\n    database_name\n,    schema_name\n,    table_name\n,    distribution_policy_name\n,      distribution_column\n,    index_type_desc\nORDER BY\n    table_data_space_GB desc\n\n",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"databaseName": "SQLPool01",
+				"poolName": "SQLPool01"
+			},
+			"resultLimit": 5000
+		},
+		"type": "SqlQuery"
+	}
+}

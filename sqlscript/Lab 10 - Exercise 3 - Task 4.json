@@ -1,0 +1,17 @@
+{
+	"name": "Lab 10 - Exercise 3 - Task 4",
+	"properties": {
+		"content": {
+			"query": "CREATE TABLE [wwi_perf].[Sale_Partition01]\nWITH\n(\n  DISTRIBUTION = HASH ( [CustomerId] ),\n  CLUSTERED COLUMNSTORE INDEX,\n  PARTITION\n  (\n    [TransactionDateId] RANGE RIGHT FOR VALUES (\n            20190101, 20190201, 20190301, 20190401, 20190501, 20190601, 20190701, 20190801, 20190901, 20191001, 20191101, 20191201)\n  )\n)\nAS\nSELECT\n  *\nFROM\t\n  [wwi_perf].[Sale_Heap]\nOPTION  (LABEL  = 'CTAS : Sale_Partition01')\n\nCREATE TABLE [wwi_perf].[Sale_Partition02]\nWITH\n(\n  DISTRIBUTION = HASH ( [CustomerId] ),\n  CLUSTERED COLUMNSTORE INDEX,\n  PARTITION\n  (\n    [TransactionDateId] RANGE RIGHT FOR VALUES (\n            20190101, 20190401, 20190701, 20191001)\n  )\n)\nAS\nSELECT *\nFROM\n    [wwi_perf].[Sale_Heap]\nOPTION  (LABEL  = 'CTAS : Sale_Partition02')\n\n/*\nAs you can see, the two partitioned tables are hash-distributed (1). A distributed table appears as a single table, but the rows are actually stored across 60 distributions. The rows are distributed with a hash or round-robin algorithm.\n\nThe types of distributions are:\n\nRound-robin distributed: Distributes table rows evenly across all distributions at random.\nHash distributed: Distributes table rows across the Compute nodes by using a deterministic hash function to assign each row to one distribution.\nReplicated: Full copy of table accessible on each Compute node.\nA hash-distributed table distributes table rows across the Compute nodes by using a deterministic hash function to assign each row to one distribution.\n\nSince identical values always hash to the same distribution, the data warehouse has built-in knowledge of the row locations.\n\nDedicated SQL pool uses this knowledge to minimize data movement during queries, which improves query performance. Hash-distributed tables work well for large fact tables in a star schema. They can have very large numbers of rows and still achieve high performance. There are, of course, some design considerations that help you to get the performance the distributed system is designed to provide.\n\nConsider using a hash-distributed table when:\n\nThe table size on disk is more than 2 GB.\nThe table has frequent insert, update, and delete operations.\n*/",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"databaseName": "SQLPool01",
+				"poolName": "SQLPool01"
+			},
+			"resultLimit": 5000
+		},
+		"type": "SqlQuery"
+	}
+}

@@ -1,0 +1,61 @@
+{
+	"name": "Lab 13 - Exercise 2 - Task 3",
+	"properties": {
+		"activities": [
+			{
+				"name": "lab13_azure_keyvault_secret",
+				"type": "WebActivity",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"url": "https://asakeyvaultlab8.vault.azure.net/secrets/PipelineSecret/701361441c8944319bb7ea1f1399f582?api-version=7.1",
+					"connectVia": {
+						"referenceName": "AutoResolveIntegrationRuntime",
+						"type": "IntegrationRuntimeReference"
+					},
+					"method": "GET",
+					"authentication": {
+						"type": "MSI",
+						"resource": "https://vault.azure.net"
+					}
+				}
+			},
+			{
+				"name": "Set variable1",
+				"type": "SetVariable",
+				"dependsOn": [
+					{
+						"activity": "lab13_azure_keyvault_secret",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "SecretValue",
+					"value": {
+						"value": "@activity('lab13_azure_keyvault_secret').output.value",
+						"type": "Expression"
+					}
+				}
+			}
+		],
+		"variables": {
+			"SecretValue": {
+				"type": "String",
+				"defaultValue": "@activity('lab13_azure_keyvault_secret').output.value"
+			}
+		},
+		"annotations": [],
+		"lastPublishTime": "2021-05-26T14:49:11Z"
+	},
+	"type": "Microsoft.Synapse/workspaces/pipelines"
+}

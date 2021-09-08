@@ -1,0 +1,17 @@
+{
+	"name": "Lab 10 - Exercise 4 - Task 2",
+	"properties": {
+		"content": {
+			"query": "SELECT\n    name\n    ,is_result_set_caching_on\nFROM\n    sys.databases\n\nALTER DATABASE SQLPool01\nSET RESULT_SET_CACHING ON\n\nSELECT\n    D.Year\n    ,D.Quarter\n    ,D.Month\n    ,SUM(S.TotalAmount) as TotalAmount\n    ,SUM(S.ProfitAmount) as TotalProfit\nFROM\n    [wwi_perf].[Sale_Partition02] S\n    join [wwi].[Date] D on\n        S.TransactionDateId = D.DateId\nGROUP BY\n    D.Year\n    ,D.Quarter\n    ,D.Month\nOPTION (LABEL = 'Lab: Result set caching')\n\nSELECT\n    result_cache_hit\nFROM\n    sys.dm_pdw_exec_requests\nWHERE\n    request_id =\n    (\n        SELECT TOP 1\n            request_id\n        FROM\n            sys.dm_pdw_exec_requests\n        WHERE\n            [label] = 'Lab: Result set caching'\n        ORDER BY\n            start_time desc\n    )\n\n\nSELECT\n    step_index\n    ,operation_type\n    ,location_type\n    ,status\n    ,total_elapsed_time\n    ,command\nFROM\n    sys.dm_pdw_request_steps\nWHERE\n    request_id =\n    (\n        SELECT TOP 1\n            request_id\n        FROM\n            sys.dm_pdw_exec_requests\n        WHERE\n            [label] = 'Lab: Result set caching'\n        ORDER BY\n            start_time desc\n    )\n\n\nSET RESULT_SET_CACHING OFF\n\nSELECT\n    D.Year\n    ,D.Quarter\n    ,D.Month\n    ,SUM(S.TotalAmount) as TotalAmount\n    ,SUM(S.ProfitAmount) as TotalProfit\nFROM\n    [wwi_perf].[Sale_Partition02] S\n    join [wwi].[Date] D on\n        S.TransactionDateId = D.DateId\nGROUP BY\n    D.Year\n    ,D.Quarter\n    ,D.Month\nOPTION (LABEL = 'Lab: Result set caching off')\n\nSET RESULT_SET_CACHING ON\n\nSELECT\n    D.Year\n    ,D.Quarter\n    ,D.Month\n    ,SUM(S.TotalAmount) as TotalAmount\n    ,SUM(S.ProfitAmount) as TotalProfit\nFROM\n    [wwi_perf].[Sale_Partition02] S\n    join [wwi].[Date] D on\n        S.TransactionDateId = D.DateId\nGROUP BY\n    D.Year\n    ,D.Quarter\n    ,D.Month\nOPTION (LABEL = 'Lab: Result set caching on')\n\nSELECT TOP 2\n    request_id\n    ,[label]\n    ,result_cache_hit\nFROM\n    sys.dm_pdw_exec_requests\nWHERE\n    [label] in ('Lab: Result set caching off', 'Lab: Result set caching on')\nORDER BY\n    start_time desc\n\n\nDBCC SHOWRESULTCACHESPACEUSED\n\nDBCC DROPRESULTSETCACHE\n\nALTER DATABASE SQLPool01\nSET RESULT_SET_CACHING OFF\n\n\n",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"databaseName": "SQLPool01",
+				"poolName": "SQLPool01"
+			},
+			"resultLimit": 5000
+		},
+		"type": "SqlQuery"
+	}
+}

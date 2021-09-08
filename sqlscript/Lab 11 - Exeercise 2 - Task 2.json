@@ -1,0 +1,17 @@
+{
+	"name": "Lab 11 - Exeercise 2 - Task 2",
+	"properties": {
+		"content": {
+			"query": "SELECT\n    *\nFROM\n    [wwi_perf].[vColumnStoreRowGroupStats]\nWHERE\n    Logical_Table_Name = 'Sale_Partition01'\n\n\n/*****/\n\n\nSELECT\n    *\nFROM\n    [wwi_perf].[vColumnStoreRowGroupStats]\nWHERE\n    Logical_Table_Name = 'Sale_Hash_Ordered'\n",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"databaseName": "SQLPool01",
+				"poolName": "SQLPool01"
+			},
+			"resultLimit": 5000
+		},
+		"type": "SqlQuery"
+	}
+}

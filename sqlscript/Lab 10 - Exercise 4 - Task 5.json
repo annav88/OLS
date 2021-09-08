@@ -1,0 +1,17 @@
+{
+	"name": "Lab 10 - Exercise 4 - Task 5",
+	"properties": {
+		"content": {
+			"query": "select\n    OBJ.name as table_name\n    ,COL.name as column_name\n    ,NT.distribution_id\n    ,NP.partition_id\n    ,NP.rows as partition_rows\n    ,NP.data_compression_desc\n    ,NCSS.segment_id\n    ,NCSS.version\n    ,NCSS.min_data_id\n    ,NCSS.max_data_id\n    ,NCSS.row_count\nfrom\n    sys.objects OBJ\n    JOIN sys.columns as COL ON\n        OBJ.object_id = COL.object_id\n    JOIN sys.pdw_table_mappings TM ON\n        OBJ.object_id = TM.object_id\n    JOIN sys.pdw_nodes_tables as NT on\n        TM.physical_name = NT.name\n    JOIN sys.pdw_nodes_partitions NP on\n        NT.object_id = NP.object_id\n        and NT.pdw_node_id = NP.pdw_node_id\n        and substring(TM.physical_name, 40, 10) = NP.distribution_id\n    JOIN sys.pdw_nodes_column_store_segments NCSS on\n        NP.partition_id = NCSS.partition_id\n        and NP.distribution_id = NCSS.distribution_id\n        and COL.column_id = NCSS.column_id\nwhere\n    OBJ.name = 'Sale_Hash'\n    and COL.name = 'CustomerId'\n    and TM.physical_name  not like '%HdTable%'\norder by\n    NT.distribution_id\n\n/******************************************/\n\nselect\n    OBJ.name as table_name\n    ,COL.name as column_name\n    ,NT.distribution_id\n    ,NP.partition_id\n    ,NP.rows as partition_rows\n    ,NP.data_compression_desc\n    ,NCSS.segment_id\n    ,NCSS.version\n    ,NCSS.min_data_id\n    ,NCSS.max_data_id\n    ,NCSS.row_count\nfrom\n    sys.objects OBJ\n    JOIN sys.columns as COL ON\n        OBJ.object_id = COL.object_id\n    JOIN sys.pdw_table_mappings TM ON\n        OBJ.object_id = TM.object_id\n    JOIN sys.pdw_nodes_tables as NT on\n        TM.physical_name = NT.name\n    JOIN sys.pdw_nodes_partitions NP on\n        NT.object_id = NP.object_id\n        and NT.pdw_node_id = NP.pdw_node_id\n        and substring(TM.physical_name, 40, 10) = NP.distribution_id\n    JOIN sys.pdw_nodes_column_store_segments NCSS on\n        NP.partition_id = NCSS.partition_id\n        and NP.distribution_id = NCSS.distribution_id\n        and COL.column_id = NCSS.column_id\nwhere\n    OBJ.name = 'Sale_Hash_Ordered'\n    and COL.name = 'CustomerId'\n    and TM.physical_name  not like '%HdTable%'\norder by\n    NT.distribution_id\n\n/********************************************/\n\nCREATE TABLE [wwi_perf].[Sale_Hash_Ordered]\nWITH\n(\n    DISTRIBUTION = HASH ( [CustomerId] ),\n    CLUSTERED COLUMNSTORE INDEX ORDER( [CustomerId] )\n)\nAS\nSELECT\n    *\nFROM\n    [wwi_perf].[Sale_Heap]\nOPTION  (LABEL  = 'CTAS : Sale_Hash', MAXDOP 1)\n",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"databaseName": "SQLPool01",
+				"poolName": "SQLPool01"
+			},
+			"resultLimit": 5000
+		},
+		"type": "SqlQuery"
+	}
+}

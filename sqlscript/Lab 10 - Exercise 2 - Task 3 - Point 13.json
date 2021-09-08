@@ -1,0 +1,17 @@
+{
+	"name": "Lab 10 - Exercise 2 - Task 3 - Point 13",
+	"properties": {
+		"content": {
+			"query": "IF  EXISTS (SELECT * FROM sys.workload_management_workload_classifiers where group_name = 'CEODemo')\nBEGIN\n    Drop Workload Classifier CEODreamDemo\n    DROP WORKLOAD GROUP CEODemo\nEND\n--- Creates a workload group 'CEODemo'.\nCreate  WORKLOAD GROUP CEODemo WITH  \n(\n    MIN_PERCENTAGE_RESOURCE = 26 -- integer value\n    ,REQUEST_MIN_RESOURCE_GRANT_PERCENT = 3.25 -- factor of 26 (guaranteed more than 4 concurrencies)\n    ,CAP_PERCENTAGE_RESOURCE = 100\n)\n--- Creates a workload Classifier 'CEODreamDemo'.\nCreate Workload Classifier CEODreamDemo with\n(Workload_Group ='CEODemo',MemberName='asa.sql.workload02',IMPORTANCE = BELOW_NORMAL);\n",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"databaseName": "SQLPool01",
+				"poolName": "SQLPool01"
+			},
+			"resultLimit": 5000
+		},
+		"type": "SqlQuery"
+	}
+}

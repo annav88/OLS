@@ -1,0 +1,17 @@
+{
+	"name": "Lab 10 - Exercise 1 - Task 3",
+	"properties": {
+		"content": {
+			"query": "SELECT CustomerId from wwi_poc.Sale\nSELECT APPROX_COUNT_DISTINCT(CustomerId) from wwi_poc.Sale",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"databaseName": "SQLPool01",
+				"poolName": "SQLPool01"
+			},
+			"resultLimit": 5000
+		},
+		"type": "SqlQuery"
+	}
+}

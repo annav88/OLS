@@ -1,0 +1,17 @@
+{
+	"name": "Lab 10 - Exercise 1 - Task 2_1",
+	"properties": {
+		"content": {
+			"query": "SELECT\n  ROW_NUMBER() OVER(PARTITION BY Region ORDER BY Quantity DESC) AS \"Row Number\",\n  Product,\n  Quantity,\n  Region\nFROM wwi_security.Sale\nWHERE Quantity <> 0  \nORDER BY Region;\n",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"databaseName": "SQLPool01",
+				"poolName": "SQLPool01"
+			},
+			"resultLimit": 5000
+		},
+		"type": "SqlQuery"
+	}
+}

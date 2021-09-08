@@ -1,0 +1,17 @@
+{
+	"name": "Lab 10 - Exercise 4 - Task 3",
+	"properties": {
+		"content": {
+			"query": "SELECT name, is_auto_create_stats_on\nFROM sys.databases\n\nSELECT\n    *\nFROM\n    sys.dm_pdw_exec_requests\nWHERE\n    Command like 'CREATE STATISTICS%'\n\nDBCC SHOW_STATISTICS ('wwi_perf.Sale_Hash', CustomerId) WITH HISTOGRAM\n\nCREATE STATISTICS Sale_Hash_CustomerId ON wwi_perf.Sale_Hash (CustomerId)\n\nDBCC SHOW_STATISTICS([wwi_perf.Sale_Hash], 'Sale_Hash_CustomerId')\n\n",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"databaseName": "SQLPool01",
+				"poolName": "SQLPool01"
+			},
+			"resultLimit": 5000
+		},
+		"type": "SqlQuery"
+	}
+}

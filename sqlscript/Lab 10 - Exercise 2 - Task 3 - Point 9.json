@@ -1,0 +1,17 @@
+{
+	"name": "Lab 10 - Exercise 2 - Task 3 - Point 9",
+	"properties": {
+		"content": {
+			"query": "SELECT s.login_name, r.[Status], r.Importance, submit_time,\nstart_time ,s.session_id FROM sys.dm_pdw_exec_sessions s\nJOIN sys.dm_pdw_exec_requests r ON s.session_id = r.session_id\nWHERE s.login_name IN ('asa.sql.workload02') and Importance\nis not NULL AND r.[status] in ('Running','Suspended')\nORDER BY submit_time, status\n",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"databaseName": "SQLPool01",
+				"poolName": "SQLPool01"
+			},
+			"resultLimit": 5000
+		},
+		"type": "SqlQuery"
+	}
+}

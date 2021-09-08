@@ -1,0 +1,17 @@
+{
+	"name": "Lab 10 - Exercise 3 - Task 1",
+	"properties": {
+		"content": {
+			"query": "SELECT  \n    COUNT_BIG(*)\nFROM\n    [wwi_poc].[Sale]\n\n/*The below query will take longer than the above one*/\nSELECT TOP 1000 * FROM\n(\n    SELECT\n        S.CustomerId\n        ,SUM(S.TotalAmount) as TotalAmount\n    FROM\n        [wwi_poc].[Sale] S\n    GROUP BY\n        S.CustomerId\n) T\nOPTION (LABEL = 'Lab: Heap')\n\n/*Then have a look at the table distributio [wwi_poc].[Sale] and notice it has a heap structure, hence queries take long as not optimized*/\n\nEXPLAIN WITH_RECOMMENDATIONS\nSELECT TOP 1000 * FROM\n(\n    SELECT\n        S.CustomerId\n        ,SUM(S.TotalAmount) as TotalAmount\n    FROM\n        [wwi_poc].[Sale] S\n    GROUP BY\n        S.CustomerId\n) T\n\n/*\nNotice the details of the internal layout of the MPP system:\n\n<dsql_query number_nodes=\"4\" number_distributions=\"60\" number_distributions_per_node=\"15\">\n\nThis layout is given by the current Date Warehouse Units (DWU) setting. In the setup used for the example above, we were running at DW2000c which means that there are 4 physical nodes to service the 60 distributions, giving a number of 15 distributions per physical node. Depending on your own DWU settings, these numbers will vary.\n*/\n\nSELECT  \n    *\nFROM    \n    sys.dm_pdw_exec_requests\nWHERE   \n    [label] = 'Lab: Heap'\n\nSELECT\n    *\nFROM\n    sys.dm_pdw_dms_workers\nWHERE\n    request_id = 'QID5418'\n    AND step_index = 2\nORDER BY\n    distribution_id\n",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"databaseName": "SQLPool01",
+				"poolName": "SQLPool01"
+			},
+			"resultLimit": 5000
+		},
+		"type": "SqlQuery"
+	}
+}

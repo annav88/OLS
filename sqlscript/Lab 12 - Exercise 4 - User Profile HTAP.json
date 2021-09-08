@@ -1,0 +1,17 @@
+{
+	"name": "Lab 12 - Exercise 4 - User Profile HTAP",
+	"properties": {
+		"content": {
+			"query": "USE master\nGO\n\nIF DB_ID (N'Profiles') IS NULL\nBEGIN\n    CREATE DATABASE Profiles;\nEND\nGO\n\nUSE Profiles\nGO\n\nDROP VIEW IF EXISTS UserProfileHTAP;\nGO\n\nCREATE VIEW UserProfileHTAP\nAS\nSELECT\n    *\nFROM OPENROWSET(\n    'CosmosDB',\n    N'account=asacosmosdblab8;database=CustomerProfile;key=X0mJkxACxVmtL9EK6jDX6BzNBclzW2FZSj3CbxCJ6dKnkGKLIBouzBjkObQhRfVlgvUAFuCgYrfwwGTb8xPrBQ==',\n    UserProfileHTAP\n)\nWITH (\n    userId bigint,\n    cartId varchar(50),\n    preferredProducts varchar(max),\n    productReviews varchar(max)\n) AS profiles\nCROSS APPLY OPENJSON (productReviews)\nWITH (\n    productId bigint,\n    reviewText varchar(1000)\n) AS reviews\nGO\n",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"databaseName": "Profiles",
+				"poolName": "Built-in"
+			},
+			"resultLimit": 5000
+		},
+		"type": "SqlQuery"
+	}
+}

@@ -1,0 +1,17 @@
+{
+	"name": "Lab 11 - Exercise 4 - Task 2",
+	"properties": {
+		"content": {
+			"query": "EXPLAIN WITH_RECOMMENDATIONS\nSELECT\n    T.TransactionItemsCountBucket\n    ,count(*) as CustomersCount\nFROM\n    (\n        SELECT\n            CustomerId,\n            (\n                COUNT(*) - \n                (\n                    SELECT \n                        MIN(TransactionItemsCount)\n                    FROM \n                    (\n                        SELECT \n                            COUNT(*) as TransactionItemsCount\n                        FROM \n                            [wwi_perf].[Sale_Hash] \n                        GROUP BY \n                            CustomerId \n                    ) X \n                )\n            ) / 100 as TransactionItemsCountBucket\n        FROM\n            [wwi_perf].[Sale_Hash]\n        GROUP BY\n            CustomerId\n    ) T\nGROUP BY\n    T.TransactionItemsCountBucket\nORDER BY\n    T.TransactionItemsCountBucket\n\n/*****/\n\nCREATE MATERIALIZED VIEW\n    mvTransactionItemsCounts\nWITH\n(\n    DISTRIBUTION = HASH([CustomerId])\n)\nAS\nSELECT\n    CustomerId\n    ,COUNT(*) AS ItemsCount\nFROM\n    [wwi_perf].[Sale_Hash]\nGROUP BY\n    CustomerId\n\n/***/\n\nEXPLAIN WITH_RECOMMENDATIONS\nSELECT\n    T.TransactionItemsCountBucket\n    ,count(*) as CustomersCount\nFROM\n    (\n        SELECT\n            CustomerId,\n            (\n                COUNT(*) - \n                (\n                    SELECT \n                        MIN(TransactionItemsCount)\n                    FROM \n                    (\n                        SELECT \n                            COUNT(*) as TransactionItemsCount\n                        FROM \n                            [wwi_perf].[Sale_Hash] \n                        GROUP BY \n                            CustomerId \n                    ) X \n                )\n            ) / 100 as TransactionItemsCountBucket\n        FROM\n            [wwi_perf].[Sale_Hash]\n        GROUP BY\n            CustomerId\n    ) T\nGROUP BY\n    T.TransactionItemsCountBucket\nORDER BY\n    T.TransactionItemsCountBucket\n\n/***/\n\n",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"databaseName": "SQLPool01",
+				"poolName": "SQLPool01"
+			},
+			"resultLimit": 5000
+		},
+		"type": "SqlQuery"
+	}
+}

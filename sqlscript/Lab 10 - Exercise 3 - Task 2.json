@@ -1,0 +1,17 @@
+{
+	"name": "Lab 10 - Exercise 3 - Task 2",
+	"properties": {
+		"content": {
+			"query": "CREATE TABLE [wwi_perf].[Sale_Hash]\nWITH\n(\n   DISTRIBUTION = HASH ( [CustomerId] ),\n   CLUSTERED COLUMNSTORE INDEX\n)\nAS\nSELECT\n   *\nFROM\n   [wwi_poc].[Sale]\n\nSELECT TOP 1000 * FROM\n(\n    SELECT\n        S.CustomerId\n        ,SUM(S.TotalAmount) as TotalAmount\n    FROM\n        [wwi_perf].[Sale_Hash] S\n    GROUP BY\n        S.CustomerId\n) T\n\nEXPLAIN\nSELECT TOP 1000 * FROM\n(\n    SELECT\n        S.CustomerId\n        ,SUM(S.TotalAmount) as TotalAmount\n    FROM\n        [wwi_perf].[Sale_Hash] S\n    GROUP BY\n        S.CustomerId\n) T\n\nSELECT\n    AVG(TotalProfit) as AvgMonthlyCustomerProfit\nFROM\n(\n    SELECT\n        S.CustomerId\n        ,D.Year\n        ,D.Month\n        ,SUM(S.TotalAmount) as TotalAmount\n        ,AVG(S.TotalAmount) as AvgAmount\n        ,SUM(S.ProfitAmount) as TotalProfit\n        ,AVG(S.ProfitAmount) as AvgProfit\n    FROM\n        [wwi_perf].[Sale_Partition01] S\n        join [wwi].[Date] D on\n            D.DateId = S.TransactionDateId\n    GROUP BY\n        S.CustomerId\n        ,D.Year\n        ,D.Month\n) T\n",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"databaseName": "SQLPool01",
+				"poolName": "SQLPool01"
+			},
+			"resultLimit": 5000
+		},
+		"type": "SqlQuery"
+	}
+}

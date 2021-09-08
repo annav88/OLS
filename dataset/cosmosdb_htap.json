@@ -1,0 +1,16 @@
+{
+	"name": "cosmosdb_htap",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "asacosmosdb01",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "CosmosDbSqlApiCollection",
+		"schema": {},
+		"typeProperties": {
+			"collectionName": "UserProfileHTAP"
+		}
+	},
+	"type": "Microsoft.Synapse/workspaces/datasets"
+}

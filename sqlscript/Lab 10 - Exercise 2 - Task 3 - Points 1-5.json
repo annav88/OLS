@@ -1,0 +1,17 @@
+{
+	"name": "Lab 10 - Exercise 2 - Task 3 - Points 1-5",
+	"properties": {
+		"content": {
+			"query": "IF NOT EXISTS (SELECT * FROM sys.workload_management_workload_groups where name = 'CEODemo')\nBEGIN\n    Create WORKLOAD GROUP CEODemo WITH  \n    ( MIN_PERCENTAGE_RESOURCE = 50        -- integer value\n    ,REQUEST_MIN_RESOURCE_GRANT_PERCENT = 25 --  \n    ,CAP_PERCENTAGE_RESOURCE = 100\n    )\nEND\n\nIF NOT EXISTS (SELECT * FROM sys.workload_management_workload_classifiers where  name = 'CEODreamDemo')\nBEGIN\n    Create Workload Classifier CEODreamDemo with\n    ( Workload_Group ='CEODemo',MemberName='asa.sql.workload02',IMPORTANCE = BELOW_NORMAL);\nEND\n\nSELECT s.login_name, r.[Status], r.Importance, submit_time,\nstart_time ,s.session_id FROM sys.dm_pdw_exec_sessions s\nJOIN sys.dm_pdw_exec_requests r ON s.session_id = r.session_id\nWHERE s.login_name IN ('asa.sql.workload02') and Importance\nis not NULL AND r.[status] in ('Running','Suspended')\nORDER BY submit_time, status\n",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"databaseName": "SQLPool01",
+				"poolName": "SQLPool01"
+			},
+			"resultLimit": 5000
+		},
+		"type": "SqlQuery"
+	}
+}

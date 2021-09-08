@@ -1,0 +1,17 @@
+{
+	"name": "Lab 10 - Exercise 2 - Task 2 - Point 10",
+	"properties": {
+		"content": {
+			"query": "IF EXISTS (SELECT * FROM sys.workload_management_workload_classifiers WHERE name = 'CEO')\nBEGIN\n    DROP WORKLOAD CLASSIFIER CEO;\nEND\nCREATE WORKLOAD CLASSIFIER CEO\n  WITH (WORKLOAD_GROUP = 'largerc'\n  ,MEMBERNAME = 'asa.sql.workload01',IMPORTANCE = High);\n",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"databaseName": "SQLPool01",
+				"poolName": "SQLPool01"
+			},
+			"resultLimit": 5000
+		},
+		"type": "SqlQuery"
+	}
+}

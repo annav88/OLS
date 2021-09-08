@@ -1,0 +1,17 @@
+{
+	"name": "Lab 10 - Exercise 1 - Task 2_4",
+	"properties": {
+		"content": {
+			"query": "-- ROWS UNBOUNDED PRECEDING\nSELECT DISTINCT bc.Country, b.Title AS Book, bc.Downloads\n    ,FIRST_VALUE(b.Title) OVER (PARTITION BY Country  \n        ORDER BY Downloads ASC ROWS UNBOUNDED PRECEDING) AS FewestDownloads\nFROM dbo.BookConsumption AS bc\nINNER JOIN dbo.Books AS b\n    ON b.ID = bc.BookID\nORDER BY Country, Downloads\n",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"databaseName": "SQLPool01",
+				"poolName": "SQLPool01"
+			},
+			"resultLimit": 5000
+		},
+		"type": "SqlQuery"
+	}
+}

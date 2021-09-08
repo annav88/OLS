@@ -1,0 +1,17 @@
+{
+	"name": "Lab 10 - Exercise 1 - Task 1 - Create tables",
+	"properties": {
+		"content": {
+			"query": "IF OBJECT_ID(N'[dbo].[Category]', N'U') IS NOT NULL\nDROP TABLE [dbo].[Category]\n\nCREATE TABLE [dbo].[Category]\n( \n    [ID] [float]  NOT NULL,\n    [Category] [varchar](255)  NULL,\n    [SubCategory] [varchar](255)  NULL\n)\nWITH\n(\n    DISTRIBUTION = ROUND_ROBIN,\n    CLUSTERED COLUMNSTORE INDEX\n)\nGO\n\nIF OBJECT_ID(N'[dbo].[Books]', N'U') IS NOT NULL\nDROP TABLE [dbo].[Books]\n\nCREATE TABLE [dbo].[Books]\n( \n    [ID] [float]  NOT NULL,\n    [BookListID] [float]  NULL,\n    [Title] [varchar](255)  NULL,\n    [Author] [varchar](255)  NULL,\n    [Duration] [float]  NULL,\n    [Image] [varchar](255)  NULL\n)\nWITH\n(\n    DISTRIBUTION = ROUND_ROBIN,\n    CLUSTERED COLUMNSTORE INDEX\n)\nGO\n\nIF OBJECT_ID(N'[dbo].[BookConsumption]', N'U') IS NOT NULL\nDROP TABLE [dbo].[BookConsumption]\n\nCREATE TABLE [dbo].[BookConsumption]\n( \n    [BookID] [float]  NULL,\n    [Clicks] [float]  NULL,\n    [Downloads] [float]  NULL,\n    [Time Spent] [float]  NULL,\n    [Country] [varchar](255)  NULL\n)\nWITH\n(\n    DISTRIBUTION = ROUND_ROBIN,\n    CLUSTERED COLUMNSTORE INDEX\n)\nGO\n\nIF OBJECT_ID(N'[dbo].[BookList]', N'U') IS NOT NULL\nDROP TABLE [dbo].[BookList]\n\nCREATE TABLE [dbo].[BookList]\n( \n    [ID] [float]  NOT NULL,\n    [CategoryID] [float]  NULL,\n    [BookList] [varchar](255)  NULL\n)\nWITH\n(\n    DISTRIBUTION = ROUND_ROBIN,\n    CLUSTERED COLUMNSTORE INDEX\n)\nGO\n\nCOPY INTO Category \nFROM 'https://solliancepublicdata.blob.core.windows.net/dataengineering/dp-203/books/Category.csv'\nWITH (\n    FILE_TYPE = 'CSV',\n    FIRSTROW = 2\n)\nGO\n\nCOPY INTO Books \nFROM 'https://solliancepublicdata.blob.core.windows.net/dataengineering/dp-203/books/Books.csv'\nWITH (\n    FILE_TYPE = 'CSV',\n    FIRSTROW = 2\n)\nGO\n\nCOPY INTO BookConsumption \nFROM 'https://solliancepublicdata.blob.core.windows.net/dataengineering/dp-203/books/BookConsumption.csv'\nWITH (\n    FILE_TYPE = 'CSV',\n    FIRSTROW = 2\n)\nGO\n\nCOPY INTO BookList \nFROM 'https://solliancepublicdata.blob.core.windows.net/dataengineering/dp-203/books/BookList.csv'\nWITH (\n    FILE_TYPE = 'CSV',\n    FIRSTROW = 2\n)\nGO\n",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"databaseName": "SQLPool01",
+				"poolName": "SQLPool01"
+			},
+			"resultLimit": 5000
+		},
+		"type": "SqlQuery"
+	}
+}
